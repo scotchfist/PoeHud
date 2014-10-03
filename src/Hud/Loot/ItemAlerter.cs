@@ -111,10 +111,17 @@ namespace PoeHUD.Hud.Loot
 			Rect clientRect = this.poe.Internal.game.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
 			Vec2 rightTopAnchor = new Vec2(clientRect.X + clientRect.W, clientRect.Y + clientRect.H + 5);
 			
-			int y = rightTopAnchor.Y;
+		//int y = rightTopAnchor.Y;
 			int fontSize = Settings.GetInt("ItemAlert.ShowText.FontSize");
-
-			foreach (KeyValuePair<ExileBot.Entity, AlertDrawStyle> kv in this.currentAlerts)
+            
+            Rect lowerItemBox =new Rect(clientWindow.X + 731, clientWindow.Y + clientWindow.H - 150, 1095, 119);
+            
+            if (this.currentAlerts.Count > 0)
+            {
+                rc.AddBox(lowerItemBox, Color.FromArgb(0, 0, 0, 0));
+            }
+            int x = lowerItemBox.X;
+            foreach (KeyValuePair<ExileBot.Entity, AlertDrawStyle> kv in this.currentAlerts)
 			{
 				if (!kv.Key.IsValid) continue;
 
@@ -123,32 +130,33 @@ namespace PoeHUD.Hud.Loot
 
 				AlertDrawStyle drawStyle = kv.Value;
 				int frameWidth = drawStyle.FrameWidth;
-				Vec2 vPadding = new Vec2(frameWidth + 5, frameWidth);
+				Vec2 vPadding = new Vec2(frameWidth, frameWidth);
 				int frameMargin = frameWidth + 2;
+                if (drawStyle.IconIndex >= 0){x += fontSize+10;}
+				Vec2 textPos = new Vec2(x + vPadding.X, lowerItemBox.Y + vPadding.Y);
 
-				Vec2 textPos = new Vec2(rightTopAnchor.X - vPadding.X, y + vPadding.Y);
-
-				var vTextFrame = rc.AddTextWithHeight(textPos, text, drawStyle.color, fontSize, DrawTextFormat.Right);
-				int iconSize = vTextFrame.Y;
+				var vTextFrame = rc.AddTextWithHeight(textPos, text, drawStyle.color, fontSize, DrawTextFormat.Left);
+                int iconSize = vTextFrame.Y;
 				bool hasIcon = drawStyle.IconIndex >= 0;
 
 				int maxHeight = vTextFrame.Y + 2*vPadding.Y + frameMargin;
 				int maxWidth = vTextFrame.X + 2 * vPadding.X + (hasIcon ? iconSize : 0);
-				rc.AddBox(new Rect(rightTopAnchor.X - maxWidth, y, maxWidth, maxHeight), Color.FromArgb(180, 0, 0, 0));
+				rc.AddBox(new Rect(x, lowerItemBox.Y + vPadding.Y, maxWidth, maxHeight), Color.FromArgb(255, 0, 0, 0));
 
 				if (hasIcon)
 				{
 					const float iconsInSprite = 4;
 
-					Rect iconPos = new Rect(textPos.X - iconSize - vTextFrame.X, textPos.Y, iconSize, iconSize);
+					Rect iconPos = new Rect(textPos.X - iconSize, textPos.Y, iconSize, iconSize);
 					RectUV uv = new RectUV(drawStyle.IconIndex / iconsInSprite, 0, (drawStyle.IconIndex + 1) / iconsInSprite, 1);
 					rc.AddSprite("item_icons.png", iconPos, uv);
 				}
-				if( frameWidth > 0) {
+                x += vTextFrame.X + frameWidth + 5;
+				/*if( frameWidth > 0) {
 					Rect frame = new Rect(rightTopAnchor.X - vTextFrame.X - 2*vPadding.X, y, vTextFrame.X + 2*vPadding.X, vTextFrame.Y + 2*vPadding.Y);
 					rc.AddFrame(frame, kv.Value.color, frameWidth);
-				}
-				y += vTextFrame.Y + 2 * vPadding.Y + frameMargin;
+				}*/
+				//y += vTextFrame.Y + 2 * vPadding.Y + frameMargin;
 			}
 			
 		}
