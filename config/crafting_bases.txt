@@ -1,2 +1,21 @@
 Vaal Regalia,78
 Corsair Sword,78
+Imbued Want,78
+Astral Plate,78
+Archon Shield,78
+Thicket Bow,78
+Engrave Wand,78
+Platinum Kris,78
+Ambusher,78
+Jeweled Foil,78
+Harbinger Bow,78
+Onyx Amulet,78
+Coral Ring,78
+Iron Ring,78
+Leather Belt,78
+Rustic Sash,78
+Unset Ring,78
+Two-Stone Ring,78
+Amethyst Ring,78
+Titan Gauntlets,78
+Heavy Belt,78
